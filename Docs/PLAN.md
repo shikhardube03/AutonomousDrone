@@ -1,4 +1,4 @@
-## Project: Drone Programming, autonomous drone movements and reactions to hand poses
+## Project: Drone Programming, autonomous movements, facial recognition and hand poses reactions
 - Features: Drone should be able to dodge the obstacles when flying, while carrying tasks like facial recognition, object localization etc. Also the drone should move correspondingly when people give it hand gesture commands.
 
 ### Sprint 0
