@@ -1,22 +1,13 @@
-import cv2
-import numpy as np
+import torch
 
-onnx_model_path = "Resources/model.onnx"
-sample_image = "Resources/Images/IMG_0776.jpg"
+# Model
+model = torch.hub.load('ultralytics/yolov5', 'yolov5s')  # or yolov5m, yolov5l, yolov5x, custom
 
-# The Magic:
-net = cv2.dnn.readNetFromONNX(onnx_model_path)
-image = cv2.imread(sample_image)
-blob = cv2.dnn.blobFromImage(image, 1.0 / 255, (224, 224), (0, 0, 0), wswapRB=True, crop=False)
-net.setInput(blob)
-preds = net.forward()
-biggest_pred_index = np.array(preds)[0].argmax()
-print("Predicted class:", biggest_pred_index)
+# Images
+img = 'https://ultralytics.com/images/zidane.jpg'  # or file, Path, PIL, OpenCV, numpy, list
 
-import requests
+# Inference
+results = model(img)
 
-LABELS_URL = 'https://s3.amazonaws.com/outcome-blog/imagenet/labels.json'
-labels = {int(key): value for (key, value)
-          in requests.get(LABELS_URL).json().items()}
-
-print("The class", biggest_pred_index, "correspond to", labels[biggest_pred_index])
+# Results
+results.print()  # or .show(), .save(), .crop(), .pandas(), etc.
