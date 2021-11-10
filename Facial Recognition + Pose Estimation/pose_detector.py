@@ -1,5 +1,5 @@
 from cvzone.PoseModule import PoseDetector
-import cv2
+import cv2.cv2 as cv2
 
 cap = cv2.VideoCapture(0)
 detector = PoseDetector()
