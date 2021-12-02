@@ -91,6 +91,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
     # Dataloader
     if webcam:
         print("sssssssss")
+        print(type(source))
         view_img = check_imshow()
         cudnn.benchmark = True  # set True to speed up constant image size inference
         dataset = LoadStreams(source, img_size=imgsz, stride=stride, auto=pt and not jit)
