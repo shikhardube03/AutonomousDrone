@@ -6,7 +6,10 @@ import onnxruntime
 import cv2
 import numpy as np
 import torch
+from pathlib import Path
+import sys
 import torch.backends.cudnn as cudnn
+import os
 weights = 'yolov5s.onnx'
 w = str(weights[0] if isinstance(weights, list) else weights)
 session = onnxruntime.InferenceSession(w, None)
@@ -56,7 +59,6 @@ def check_imshow():
     except Exception as e:
         print(f'WARNING: Environment does not support cv2.imshow() or PIL Image.show() image displays\n{e}')
         return False
-
 
 img0 = cv2.imread('/Users/karoliskrakys/PycharmProjects/Group52-FA21/Project/Resources/Images/IMG_0776.jpg')  # BGR
 img0 = cv2.resize(img0, (640,640))
