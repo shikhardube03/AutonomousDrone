@@ -49,7 +49,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
         save_conf=False,  # save confidences in --save-txt labels
         save_crop=True,  # save cropped prediction boxes
         nosave=False,  # do not save images/videos
-        classes=[0],  # filter by class: --class 0, or --class 0 2 3
+        classes=[65],  # filter by class: --class 0, or --class 0 2 3
         agnostic_nms=False,  # class-agnostic NMS
         augment=False,  # augmented inference
         visualize=False,  # visualize features
@@ -162,9 +162,10 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
                         annotator.box_label(xyxy, label, color=colors(c, True))
                         if save_crop:
 
-                            path = save_dir / 'crops' / names[c] / f'{p}.jpg'
-                            c, p = save_one_box(xyxy, imc, file=path, BGR=True)
-                            print(distance_calc(p))
+                            path = save_dir / 'crops' / names[c] / f'{p.stem}.jpg'
+                            c, pp = save_one_box(xyxy, imc, file=path, BGR=True)
+                            dist = distance_calc(pp)/2.1
+                            print(dist)
 
             # Print time (inference-only)
             LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')

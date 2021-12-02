@@ -1,8 +1,13 @@
 # install opencv "pip install opencv-python"
 import cv2
 from skimage import io
-
+import djitellopy as tello
 # focal length finder function
+
+me = tello.Tello()
+me.connect()
+print(me.get_battery())
+
 def Focal_Length_Finder(measured_distance, real_width, width_in_rf_image):
     # finding the focal length
     focal_length = (width_in_rf_image * measured_distance) / real_width
@@ -43,4 +48,8 @@ def distance_calc(image):
 
     distance = Distance_finder(
         focal_length_found, known_width, w)
+
+    if (distance < 20):
+        me.
+
     return distance
