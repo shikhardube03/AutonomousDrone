@@ -4,9 +4,9 @@ from skimage import io
 import djitellopy as tello
 # focal length finder function
 
-me = tello.Tello()
-me.connect()
-print(me.get_battery())
+# me = tello.Tello()
+# me.connect()
+# print(me.get_battery())
 
 def Focal_Length_Finder(measured_distance, real_width, width_in_rf_image):
     # finding the focal length
