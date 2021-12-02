@@ -35,6 +35,7 @@ from utils.plots import Annotator, colors, save_one_box
 from utils.torch_utils import select_device, time_sync
 from estimatingDistance import distance_calc
 
+
 @torch.no_grad()
 def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
         source="0",  # file/dir/URL/glob, 0 for webcam
@@ -48,7 +49,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
         save_conf=False,  # save confidences in --save-txt labels
         save_crop=True,  # save cropped prediction boxes
         nosave=False,  # do not save images/videos
-        classes=[56, 0],  # filter by class: --class 0, or --class 0 2 3
+        classes=[0],  # filter by class: --class 0, or --class 0 2 3
         agnostic_nms=False,  # class-agnostic NMS
         augment=False,  # augmented inference
         visualize=False,  # visualize features
@@ -64,6 +65,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
         ):
     source = str(source)
     print(source)
+    number = 0
     save_img = not nosave and not source.endswith('.txt')  # save inference images
     is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
     is_url = source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://'))
@@ -147,22 +149,22 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
                     s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
 
                 # Write results
+
                 for *xyxy, conf, cls in reversed(det):
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
                         with open(txt_path + '.txt', 'a') as f:
                             f.write(('%g ' * len(line)).rstrip() % line + '\n')
-
                     if save_img or save_crop or view_img:  # Add bbox to image
                         c = int(cls)  # integer class
                         label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
                         annotator.box_label(xyxy, label, color=colors(c, True))
                         if save_crop:
-                            path = save_dir / 'crops' / names[c] / f'{p.stem}.jpg'
-                            save_one_box(xyxy, imc, file=path, BGR=True)
-                            print("Distance: " + distance_calc(path))
 
+                            path = save_dir / 'crops' / names[c] / f'{p}.jpg'
+                            c, p = save_one_box(xyxy, imc, file=path, BGR=True)
+                            print(distance_calc(p))
 
             # Print time (inference-only)
             LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')
@@ -177,6 +179,8 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
             if save_img:
                 if dataset.mode == 'image':
                     cv2.imwrite(save_path, im0)
+                    print(save_path)
+                    print(f'Distance: {distance_calc(save_path)}')
                 else:  # 'video' or 'stream'
                     if vid_path[i] != save_path:  # new video
                         vid_path[i] = save_path

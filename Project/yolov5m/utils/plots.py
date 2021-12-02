@@ -7,7 +7,6 @@ import math
 import os
 from copy import copy
 from pathlib import Path
-
 import cv2
 import matplotlib
 import matplotlib.pyplot as plt
@@ -466,5 +465,6 @@ def save_one_box(xyxy, im, file='image.jpg', gain=1.02, pad=10, square=False, BG
     crop = im[int(xyxy[0, 1]):int(xyxy[0, 3]), int(xyxy[0, 0]):int(xyxy[0, 2]), ::(1 if BGR else -1)]
     if save:
         file.parent.mkdir(parents=True, exist_ok=True)  # make directory
-        cv2.imwrite(str(increment_path(file).with_suffix('.jpg')), crop)
-    return crop
+        p = str(increment_path(file).with_suffix('.jpg'))
+        cv2.imwrite(p, crop)
+    return crop, p
