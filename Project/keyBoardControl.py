@@ -1,10 +1,12 @@
 import keyPressModule as kp
 from djitellopy import tello
 from time import sleep
+import pygame
 
 kp.init()
 me = tello.Tello()
 me.connect()
+me.streamon()
 print(me.get_battery())
 
 def getKeyboardInput():

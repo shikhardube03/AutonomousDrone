@@ -70,7 +70,6 @@ def exif_transpose(image):
     """
     Transpose a PIL image accordingly if it has an EXIF Orientation tag.
     Inplace version of https://github.com/python-pillow/Pillow/blob/master/src/PIL/ImageOps.py exif_transpose()
-
     :param image: The image to transpose.
     :return: An image.
     """
@@ -124,7 +123,6 @@ def create_dataloader(path, imgsz, batch_size, stride, single_cls=False, hyp=Non
 
 class InfiniteDataLoader(dataloader.DataLoader):
     """ Dataloader that reuses workers
-
     Uses same syntax as vanilla DataLoader
     """
 
@@ -143,7 +141,6 @@ class InfiniteDataLoader(dataloader.DataLoader):
 
 class _RepeatSampler:
     """ Sampler that repeats forever
-
     Args:
         sampler (Sampler)
     """
@@ -200,7 +197,7 @@ class LoadImages:
             # Read video
             self.mode = 'video'
             ret_val, img0 = self.cap.read()
-            if not ret_val:
+            while not ret_val:
                 self.count += 1
                 self.cap.release()
                 if self.count == self.nf:  # last video
@@ -305,8 +302,6 @@ class LoadStreams:
                 import pafy
                 s = pafy.new(s).getbest(preftype="mp4").url  # YouTube URL
             s = eval(s) if s.isnumeric() else s  # i.e. s = '0' local webcam
-            print(s)
-            ###############
             cap = cv2.VideoCapture(s)
             assert cap.isOpened(), f'{st}Failed to open {s}'
             w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -318,7 +313,6 @@ class LoadStreams:
             self.threads[i] = Thread(target=self.update, args=([i, cap, s]), daemon=True)
             LOGGER.info(f"{st} Success ({self.frames[i]} frames {w}x{h} at {self.fps[i]:.2f} FPS)")
             self.threads[i].start()
-            #################
         LOGGER.info('')  # newline
 
         # check for common shapes
@@ -340,7 +334,7 @@ class LoadStreams:
                     self.imgs[i] = im
                 else:
                     LOGGER.warning('WARNING: Video stream unresponsive, please check your IP camera connection.')
-                    self.imgs[i] *= 0
+                    self.imgs[i] = np.zeros_like(self.imgs[i])
                     cap.open(stream)  # re-open stream if signal was lost
             time.sleep(1 / self.fps[i])  # wait time
 

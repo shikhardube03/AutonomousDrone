@@ -27,7 +27,7 @@ if str(rOOT) not in sys.path:
     sys.path.append(str(rOOT))  # add rOOT to PATH
 rOOT = Path(os.path.relpath(rOOT, Path.cwd()))  # relative
 
-from models.common import DetectMultiBackend
+from models.common2 import DetectMultiBackend
 from utils.datasets import IMG_FORMATS, VID_FORMATS, LoadStreams
 from utils.general import (LOGGER, check_file, check_img_size, check_imshow, check_requirements, colorstr,
                            increment_path, non_max_suppression, print_args, scale_coords, strip_optimizer, xyxy2xywh)

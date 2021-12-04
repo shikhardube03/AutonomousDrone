@@ -8,10 +8,9 @@ import time
 from threading import Thread
 from typing import Optional, Union, Type, Dict
 import cv2
-
 from enforce_types import enforce_types
 
-import av
+#import av
 import numpy as np
 
 
@@ -1005,17 +1004,15 @@ class BackgroundFrameRead:
     backgroundFrameRead.frame to get the current frame.
     """
 
+    # monkey code
     def __init__(self, tello, address):
         self.address = address
         self.frame = np.zeros([300, 400, 3], dtype=np.uint8)
-        cap = cv2.VideoCapture(cam)
-        # Try grabbing frame with PyAV
-        # According to issue #90 the decoder might need some time
-        # https://github.com/damiafuentes/DJITelloPy/issues/90#issuecomment-855458905
         try:
             Tello.LOGGER.debug('trying to grab video frames...')
-            self.container = av.open(self.address, timeout=(Tello.FRAME_GRAB_TIMEOUT, None))
-        except av.error.ExitError:
+            cap = cv2.VideoCapture(address) # :O
+            #self.container = av.open(self.address, timeout=(Tello.FRAME_GRAB_TIMEOUT, None))
+        except:
             raise Exception('Failed to grab video frames from video stream')
         
         self.stopped = False
@@ -1037,9 +1034,9 @@ class BackgroundFrameRead:
                 if self.stopped:
                     self.container.close()
                     break
-        except av.error.ExitError:
+        except:
             raise Exception('Do not have enough frames for decoding, please try again or increase video fps before get_frame_read()')
-                
+
     def stop(self):
         """Stop the frame update worker
         Internal method, you normally wouldn't call this yourself.

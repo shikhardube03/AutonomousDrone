@@ -12,6 +12,7 @@ Usage:
                                                              'rtsp://example.com/media.mp4'  # rTSP, rTMP, HTTP stream
 """
 
+import djitellopy as tello
 import argparse
 import os
 import sys
@@ -21,6 +22,8 @@ import cv2
 import torch
 import torch.backends.cudnn as cudnn
 
+
+
 FILE = Path(__file__).resolve()
 rOOT = FILE.parents[0]  # YOLOv5 root directory
 if str(rOOT) not in sys.path:
@@ -28,7 +31,7 @@ if str(rOOT) not in sys.path:
 rOOT = Path(os.path.relpath(rOOT, Path.cwd()))  # relative
 
 from models.common import DetectMultiBackend
-from utils.datasets import IMG_FORMATS, VID_FORMATS, LoadStreams
+from utils.datasets import IMG_FORMATS, VID_FORMATS, LoadStreams, LoadImages
 from utils.general import (LOGGER, check_file, check_img_size, check_imshow, check_requirements, colorstr,
                            increment_path, non_max_suppression, print_args, scale_coords, strip_optimizer, xyxy2xywh)
 from utils.plots import Annotator, colors, save_one_box
@@ -64,11 +67,12 @@ def run(weights=rOOT / 'yolov5s.pt',  # model.pt path(s)
         dnn=False,  # use OpenCV DNN for ONNx inference
         ):
     source = str(source)
+
     print(source)
     number = 0
     save_img = not nosave and not source.endswith('.txt')  # save inference images
     is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
-    is_url = source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://'))
+    is_url = source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://', 'udp://'))
     webcam = source.isnumeric() or source.endswith('.txt') or (is_url and not is_file)
     if is_url and is_file:
         source = check_file(source)  # download
@@ -88,13 +92,16 @@ def run(weights=rOOT / 'yolov5s.pt',  # model.pt path(s)
     if pt:
         model.model.half() if half else model.model.float()
 
-    # Dataloader
-    if webcam:
-        view_img = check_imshow()
-        cudnn.benchmark = True  # set True to speed up constant image size inference
-        dataset = LoadStreams(source, img_size=imgsz, stride=stride, auto=pt and not jit)
-        bs = len(dataset)  # batch_size
-    vid_path, vid_writer = [None] * bs, [None] * bs
+        # Dataloader
+        if webcam:
+            view_img = check_imshow()
+            cudnn.benchmark = True  # set True to speed up constant image size inference
+            dataset = LoadStreams(source, img_size=imgsz, stride=stride, auto=pt)
+            bs = len(dataset)  # batch_size
+        else:
+            dataset = LoadImages(source, img_size=imgsz, stride=stride, auto=pt)
+            bs = 1  # batch_size
+        vid_path, vid_writer = [None] * bs, [None] * bs
 
     # run inference
     model.warmup(imgsz=(1, 3, *imgsz), half=half)  # warmup
@@ -112,6 +119,8 @@ def run(weights=rOOT / 'yolov5s.pt',  # model.pt path(s)
         # Inference
         visualize = increment_path(save_dir / Path(path).stem, mkdir=True) if visualize else False
         pred = model(im, augment=augment, visualize=visualize)
+        print("pred")
+        print(pred[0].shape)
         t3 = time_sync()
         dt[1] += t3 - t2
 
@@ -162,7 +171,9 @@ def run(weights=rOOT / 'yolov5s.pt',  # model.pt path(s)
                         if save_crop:
 
                             path = save_dir / 'crops' / names[c] / f'{p.stem}.jpg'
-                            c, pp = save_one_box(xyxy, imc, file=path, BGr=True)
+                            print("imc")
+                            print(imc.shape)
+                            c, pp = save_one_box(xyxy, imc, file=path, BGR=True)
                             dist = distance_calc(pp)/2.1
                             print(dist)
 
@@ -239,9 +250,9 @@ def parse_opt():
     return opt
 
 
-def main(opt, img):
+def main(opt):
     check_requirements(exclude=('tensorboard', 'thop'))
-    run(**vars(opt), im=img)
+    run(**vars(opt))
 
 
 if __name__ == "__main__":
