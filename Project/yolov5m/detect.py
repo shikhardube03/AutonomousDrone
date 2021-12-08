@@ -41,7 +41,7 @@ from estimatingDistance import distance_calc
 
 @torch.no_grad()
 def run(weights=rOOT / 'yolov5s.pt',  # model.pt path(s)
-        source="0",  # file/dir/UrL/glob, 0 for webcam
+        source="udp://0.0.0.0:11111",  # file/dir/UrL/glob, 0 for webcam
         imgsz=640,  # inference size (pixels)
         conf_thres=0.25,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
@@ -220,7 +220,7 @@ def run(weights=rOOT / 'yolov5s.pt',  # model.pt path(s)
 def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default=rOOT / 'yolov5s.pt', help='model path(s)')
-    parser.add_argument('--source', type=str, default=0, help='file/dir/UrL/glob, 0 for webcam')
+    #parser.add_argument('--source', type=str, default=0, help='file/dir/UrL/glob, 0 for webcam')
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='NMS IoU threshold')
