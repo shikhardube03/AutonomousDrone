@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b84afd4a-b848-4860-98a2-ff7f61cf2a86" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Group52-FA21.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Group52-FA21.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="b84afd4a-b848-4860-98a2-ff7f61cf2a86" name="Changes" comment="WE FIXED THE ISSUE I WANT TO FUCKING KILL MYSELF HOLY SHIT">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project/basicMovement.py" beforeDir="false" afterPath="$PROJECT_DIR$/Project/basicMovement.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project/basicMovement.py" beforeDir="false" afterPath="$PROJECT_DIR$/Project/load.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Project/yolov5m/detect.py" beforeDir="false" afterPath="$PROJECT_DIR$/Project/yolov5m/detect.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Project/yolov5m/utils/datasets.py" beforeDir="false" afterPath="$PROJECT_DIR$/Project/yolov5m/utils/datasets.py" afterDir="false" />
     </list>
@@ -32,6 +30,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/Project/yolov5m/detect.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -67,8 +66,22 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1636222941779</updated>
+      <workItem from="1639005692730" duration="59000" />
+      <workItem from="1639183311217" duration="977000" />
+      <workItem from="1639259801331" duration="12403000" />
     </task>
+    <task id="LOCAL-00001" summary="WE FIXED THE ISSUE I WANT TO FUCKING KILL MYSELF HOLY SHIT">
+      <created>1639004107886</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1639004107886</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -86,17 +99,10 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/yolov5" />
     </ignored-roots>
+    <MESSAGE value="WE FIXED THE ISSUE I WANT TO FUCKING KILL MYSELF HOLY SHIT" />
+    <option name="LAST_COMMIT_MESSAGE" value="WE FIXED THE ISSUE I WANT TO FUCKING KILL MYSELF HOLY SHIT" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Project/yolov5m/utils/datasets.py</url>
-          <line>324</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="self" />
@@ -104,6 +110,6 @@
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Group52_FA21$detect.coverage" NAME="detect Coverage Results" MODIFIED="1639003289515" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Project/yolov5m" />
+    <SUITE FILE_PATH="coverage/Group52_FA21$detect.coverage" NAME="detect Coverage Results" MODIFIED="1639275550100" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Project/yolov5m" />
   </component>
 </project>

@@ -11,18 +11,17 @@ Usage:
                                                              'https://youtu.be/Zgi9g1ksQHc'  # YouTube
                                                              'rtsp://example.com/media.mp4'  # rTSP, rTMP, HTTP stream
 """
+from typing import Any, Union
 
 import djitellopy as tello
 import argparse
 import os
 import sys
 from pathlib import Path
-
+from djitellopy import tello
 import cv2
 import torch
 import torch.backends.cudnn as cudnn
-
-
 
 FILE = Path(__file__).resolve()
 rOOT = FILE.parents[0]  # YOLOv5 root directory
@@ -37,11 +36,22 @@ from utils.general import (LOGGER, check_file, check_img_size, check_imshow, che
 from utils.plots import Annotator, colors, save_one_box
 from utils.torch_utils import select_device, time_sync
 from estimatingDistance import distance_calc
+#from Project.load import me
+import time
+
+
+def runDrone():
+    global me
+    me = tello.Tello()
+    me.connect()
+    me.streamon()
+    me.takeoff()
 
 
 @torch.no_grad()
 def run(weights=rOOT / 'yolov5s.pt',  # model.pt path(s)
         source="udp://0.0.0.0:11111",  # file/dir/UrL/glob, 0 for webcam
+        #source=0,
         imgsz=640,  # inference size (pixels)
         conf_thres=0.25,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
@@ -52,7 +62,7 @@ def run(weights=rOOT / 'yolov5s.pt',  # model.pt path(s)
         save_conf=False,  # save confidences in --save-txt labels
         save_crop=True,  # save cropped prediction boxes
         nosave=False,  # do not save images/videos
-        classes=[65],  # filter by class: --class 0, or --class 0 2 3
+        classes=[79],  # filter by class: --class 0, or --class 0 2 3
         agnostic_nms=False,  # class-agnostic NMS
         augment=False,  # augmented inference
         visualize=False,  # visualize features
@@ -67,7 +77,6 @@ def run(weights=rOOT / 'yolov5s.pt',  # model.pt path(s)
         dnn=False,  # use OpenCV DNN for ONNx inference
         ):
     source = str(source)
-
     print(source)
     number = 0
     save_img = not nosave and not source.endswith('.txt')  # save inference images
@@ -80,7 +89,6 @@ def run(weights=rOOT / 'yolov5s.pt',  # model.pt path(s)
     # Directories
     save_dir = increment_path(Path(project) / name, exist_ok=exist_ok)  # increment run
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
-
     # Load model
     device = select_device(device)
     model = DetectMultiBackend(weights, device=device, dnn=dnn)
@@ -116,11 +124,12 @@ def run(weights=rOOT / 'yolov5s.pt',  # model.pt path(s)
         t2 = time_sync()
         dt[0] += t2 - t1
 
+        #move_drone
+        me.move_forward(10)
+
         # Inference
         visualize = increment_path(save_dir / Path(path).stem, mkdir=True) if visualize else False
         pred = model(im, augment=augment, visualize=visualize)
-        print("pred")
-        print(pred[0].shape)
         t3 = time_sync()
         dt[1] += t3 - t2
 
@@ -171,12 +180,15 @@ def run(weights=rOOT / 'yolov5s.pt',  # model.pt path(s)
                         if save_crop:
 
                             path = save_dir / 'crops' / names[c] / f'{p.stem}.jpg'
-                            print("imc")
-                            print(imc.shape)
                             c, pp = save_one_box(xyxy, imc, file=path, BGR=True)
                             dist = distance_calc(pp)/2.1
-                            print(dist)
-
+                            print("distance (cm): ")
+                            dist
+                            if dist < 35.0:
+                                me.rotate_counter_clockwise(90)
+                                me.move_forward(10)
+                                me.rotate_clockwise(90)
+                                time.sleep(2)
             # Print time (inference-only)
             LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')
 
@@ -250,11 +262,12 @@ def parse_opt():
     return opt
 
 
-def main(opt):
+def main():
+    runDrone()
+    opt = parse_opt()
     check_requirements(exclude=('tensorboard', 'thop'))
     run(**vars(opt))
 
 
 if __name__ == "__main__":
-    opt = parse_opt()
-    main(opt)
+    main()

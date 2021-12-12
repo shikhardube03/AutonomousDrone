@@ -304,7 +304,7 @@ class LoadStreams:
             s = eval(s) if s.isnumeric() else s  # i.e. s = '0' local webcam
             cap = cv2.VideoCapture(s)
             if not cap.isOpened():
-                print("fuck my ass")
+                print("not opened yet")
                 cap.open(s)
             assert cap.isOpened(), f'{st}Failed to open {s}'
             w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
