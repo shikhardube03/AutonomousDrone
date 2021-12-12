@@ -51,7 +51,6 @@ def runDrone():
 @torch.no_grad()
 def run(weights=rOOT / 'yolov5s.pt',  # model.pt path(s)
         source="udp://0.0.0.0:11111",  # file/dir/UrL/glob, 0 for webcam
-        #source=0,
         imgsz=640,  # inference size (pixels)
         conf_thres=0.25,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
