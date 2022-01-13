@@ -1,5 +1,4 @@
-# Group 52
-Group Name: TEAM_NAME
+Autononous Drone Honors Section Project
 
 [MVP Link](https://docs.google.com/document/d/1hqHV9QbB1bl3Abn92edn7EGMjEBZXK63Lg8JD6FwgIY/edit)
 
