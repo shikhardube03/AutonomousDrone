@@ -4,9 +4,16 @@ import cv2.cv2 as cv2
 import numpy as np
 import face_recognition
 from PIL import Image
+from djitellopy import tello
 
 
+# me = tello.Tello()
+# me.connect()
+# print(me.get_battery())
+# me.steamon()
+# cap = cv2.VideoCapture('udp://0.0.0.0:11111')
 cap = cv2.VideoCapture(0)
+
 detector = FaceDetector()
 
 # loading images into workspace 
@@ -19,6 +26,36 @@ Robert_encoding = face_recognition.face_encodings(known_image2)[0]
 # making array for known encodings and their names 
 known_encodings = [Shikhar_encoding, Robert_encoding]
 names = ["Shikhar", "Robert"]
+
+while True:
+    success, img = cap.read()
+    img, bboxs = detector.findFaces(img)
+    height, width, channels = img.shape
+
+    if bboxs:
+        for face in bboxs:
+            bbox = face["bbox"]
+            center = face["center"]
+            x_min = int((abs(bbox[1]) + bbox[1])/2)
+            y_min = int((abs(bbox[0]) + bbox[0]) / 2)
+            cropped_image = img[x_min:bbox[1] + bbox[3], y_min:bbox[0] + bbox[2]]
+            cropped_encoding = face_recognition.face_encodings(cropped_image)
+            if(len(cropped_encoding) > 0):
+                cropped_encoding = cropped_encoding[0]
+                for x in range(0, len(known_encodings)):
+                    results = face_recognition.compare_faces([known_encodings[x]], cropped_encoding)
+                    if (not results[0]):
+                        continue;
+                    else:
+                        cv2.putText(img, names[x],
+                                (bbox[0], bbox[1] + 40), cv2.FONT_HERSHEY_PLAIN,
+                                2, (0, 255, 0), 2)
+
+    cv2.imshow("Image", img)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+cap.release()
+cv2.destroyAllWindows()
 
 # # Making local Variables to keep track of necessary info
 # faceLocations = []
@@ -74,63 +111,3 @@ names = ["Shikhar", "Robert"]
 
 # cap.release()
 # cv2.destroyAllWindows()
-
-while True:
-    success, img = cap.read()
-    img, bboxs = detector.findFaces(img)
-    height, width, channels = img.shape
-    #print(height, width, channels)
-
-    if bboxs:
-        for face in bboxs:
-            bbox = face["bbox"]
-            center = face["center"]
-
-            x_min = int((abs(bbox[1]) + bbox[1])/2)
-            y_min = int((abs(bbox[0]) + bbox[0]) / 2)
-            cropped_image = img[x_min:bbox[1] + bbox[3], y_min:bbox[0] + bbox[2]]
-            cropped_encoding = face_recognition.face_encodings(cropped_image)
-            if(len(cropped_encoding) > 0):
-                cropped_encoding = cropped_encoding[0]
-                for x in range(0, len(known_encodings)):
-                    results = face_recognition.compare_faces([known_encodings[x]], cropped_encoding)
-                    print(results)
-                    print(x)
-                    if (not results[0]):
-                        print("test")
-                        continue;
-                    else:
-                        print(names[x])
-                        cv2.putText(img, names[x],
-                                (bbox[0], bbox[1] + 40), cv2.FONT_HERSHEY_PLAIN,
-                                2, (0, 255, 0), 2)
-
-        """ # bboxInfo - "id","bbox","score","center"
-        center = bboxs[0]["center"]
-        #cv2.circle(img, center, 5, (255, 0, 255), cv2.FILLED)
-        
-
-        # bbox - "y-min, x-min, height, width"
-        bbox = bboxs[0]["bbox"]
-        print(bboxs[1])
-
-        x_min = int((abs(bbox[1]) + bbox[1])/2)
-        y_min = int((abs(bbox[0]) + bbox[0]) / 2)
-
-        cropped_image = img[x_min:bbox[1] + bbox[3], y_min:bbox[0] + bbox[2]]
-        cropped_encoding = face_recognition.face_encodings(cropped_image)
-        if(len(cropped_encoding) > 0):
-            cropped_encoding = cropped_encoding[0]
-            results = face_recognition.compare_faces([Shikhar_encoding], cropped_encoding)
-            cv2.putText(img, 'Shikhar',
-                                (bbox[0], bbox[1] + 40), cv2.FONT_HERSHEY_PLAIN,
-                                2, (0, 255, 0), 2)
-            print(results)
-        
-        cv2.imshow("cropped", cropped_image) """
-
-    cv2.imshow("Image", img)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-cap.release()
-cv2.destroyAllWindows()
